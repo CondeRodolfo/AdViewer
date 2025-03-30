@@ -26,13 +26,7 @@ if [ ! -f "/var/www/html/artisan" ]; then
     composer require guzzlehttp/guzzle
 fi
 
-# === ESSENTIAL STEP 3: Generate app key ===
-# This fixes the "No application encryption key has been specified" error
-if [ -f "/var/www/html/.env" ]; then
-    php artisan key:generate --no-interaction --force
-else
-    echo "ERROR: .env file not found and could not be created!"
-fi
+php artisan key:generate --no-interaction --force
 
 # === ESSENTIAL STEP 4: Simple database connection handling ===
 echo "Checking database connection..."
