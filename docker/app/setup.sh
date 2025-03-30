@@ -2,13 +2,20 @@
 
 # === ESSENTIAL STEP 1: Set proper permissions ===
 # This fixes the "Permission denied" error for Laravel logs
-echo "Setting up permissions..."
+echo "Setting permissions for storage and logs..."
 mkdir -p /var/www/html/storage/logs
 mkdir -p /var/www/html/bootstrap/cache
 chmod -R 777 /var/www/html/storage
 chmod -R 777 /var/www/html/bootstrap/cache
 touch /var/www/html/storage/logs/laravel.log
 chmod 666 /var/www/html/storage/logs/laravel.log
+
+# === NEW STEP: Copy .env.example to .env if .env doesn't exist ===
+if [ ! -f "/var/www/html/.env" ] && [ -f "/var/www/html/.env.example" ]; then
+    echo "Creating .env file from .env.example..."
+    cp /var/www/html/.env.example /var/www/html/.env
+    chmod 666 /var/www/html/.env
+fi
 
 # === ESSENTIAL STEP 2: Install Laravel if not present ===
 if [ ! -f "/var/www/html/artisan" ]; then
@@ -21,7 +28,11 @@ fi
 
 # === ESSENTIAL STEP 3: Generate app key ===
 # This fixes the "No application encryption key has been specified" error
-php artisan key:generate --no-interaction --force
+if [ -f "/var/www/html/.env" ]; then
+    php artisan key:generate --no-interaction --force
+else
+    echo "ERROR: .env file not found and could not be created!"
+fi
 
 # === ESSENTIAL STEP 4: Simple database connection handling ===
 echo "Checking database connection..."

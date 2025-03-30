@@ -21,7 +21,3 @@ A simple Laravel application that imports data from an external API.
 - Simple web interface with a "Refresh Data" button
 - Imports data from an external API
 - Stores the data in a MySQL database
-
-## Development
-
-To work on this project:

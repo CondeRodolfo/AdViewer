@@ -30,10 +30,14 @@ COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 COPY setup.sh /usr/local/bin/setup.sh
 RUN chmod +x /usr/local/bin/setup.sh
 
-# Set proper directory permissions - more permissive to prevent issues
+# Set proper directory permissions - more permissive to prevent issues with WSL
 RUN mkdir -p /var/www/html/storage/logs /var/www/html/bootstrap/cache \
     && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache \
     && chown -R www-data:www-data /var/www
+
+# Ensure non-root user can modify files (helps with WSL permissions)
+RUN usermod -u 1000 www-data \
+    && groupmod -g 1000 www-data
 
 # Use setup.sh as entrypoint
 ENTRYPOINT ["setup.sh"] 
