@@ -9,7 +9,7 @@ A simple Laravel application that imports data from an external API.
 ## Setup Instructions
 
 1. Clone this repository
-2. Copy `src/.env.example` to `src/.env` for the Laravel application and Docker configuration
+2. Copy `src/.env.example` to `src/.env` and add the API_KEY to it
 3. Run Docker containers:
    ```
    docker-compose up -d
@@ -25,12 +25,3 @@ A simple Laravel application that imports data from an external API.
 ## Development
 
 To work on this project:
-
-1. Clone the repository
-2. Configure `src/.env` as needed
-3. Run the Docker containers with `docker-compose up -d`
-4. Make your changes in the `src` directory
-5. Access the Laravel container shell with:
-   ```
-   docker-compose exec app bash
-   ``` 

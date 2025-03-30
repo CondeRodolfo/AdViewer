@@ -30,8 +30,10 @@ COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 COPY setup.sh /usr/local/bin/setup.sh
 RUN chmod +x /usr/local/bin/setup.sh
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html
+# Set proper directory permissions - more permissive to prevent issues
+RUN mkdir -p /var/www/html/storage/logs /var/www/html/bootstrap/cache \
+    && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www
 
 # Use setup.sh as entrypoint
 ENTRYPOINT ["setup.sh"] 
