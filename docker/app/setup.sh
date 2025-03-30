@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# === ESSENTIAL STEP 1: Set proper permissions ===
-# This fixes the "Permission denied" error for Laravel logs
+# === Set proper permissions ===
 echo "Setting permissions for storage and logs..."
 mkdir -p /var/www/html/storage/logs
 mkdir -p /var/www/html/bootstrap/cache
@@ -10,14 +9,14 @@ chmod -R 777 /var/www/html/bootstrap/cache
 touch /var/www/html/storage/logs/laravel.log
 chmod 666 /var/www/html/storage/logs/laravel.log
 
-# === NEW STEP: Copy .env.example to .env if .env doesn't exist ===
-if [ ! -f "/var/www/html/.env" ] && [ -f "/var/www/html/.env.example" ]; then
-    echo "Creating .env file from .env.example..."
-    cp /var/www/html/.env.example /var/www/html/.env
-    chmod 666 /var/www/html/.env
-fi
+# # === NEW STEP: Copy .env.example to .env if .env doesn't exist ===
+# if [ ! -f "/var/www/html/.env" ] && [ -f "/var/www/html/.env.example" ]; then
+#     echo "Creating .env file from .env.example..."
+#     cp /var/www/html/.env.example /var/www/html/.env
+#     chmod 666 /var/www/html/.env
+# fi
 
-# === ESSENTIAL STEP 2: Install Laravel if not present ===
+# === Install Laravel if not present ===
 if [ ! -f "/var/www/html/artisan" ]; then
     echo "Installing Laravel..."
     composer create-project --prefer-dist laravel/laravel:^10.0 /tmp/laravel
@@ -27,6 +26,8 @@ if [ ! -f "/var/www/html/artisan" ]; then
 fi
 
 php artisan key:generate --no-interaction --force
+
+docker restart laravel-app
 
 # === ESSENTIAL STEP 4: Simple database connection handling ===
 echo "Checking database connection..."
